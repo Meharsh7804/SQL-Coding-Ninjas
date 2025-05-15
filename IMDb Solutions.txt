@@ -1,0 +1,66 @@
+Problem statement :-
+Retrieve the title and rating of movies from the IMDb dataset that were released in 2014, 
+belong to a genre starting with 'C', and had a budget exceeding 4 Crore.
+
+Solution :-
+	SELECT Title, Rating
+	FROM IMDB
+	JOIN genre ON imdb.movie_id = genre.movie_id
+	WHERE genre.genre LIKE 'C%'	
+	  AND IMDB.Title LIKE '%(2014)'
+	  AND IMDB.Budget >= 40000000;
+
+
+Problem statement :-
+Print the title and ratings of the movies released in 2012 whose metacritic 
+rating is more than 60 and Domestic collections exceed 10 Crores.
+
+Solution :-
+	SELECT Title, Rating
+	FROM IMDB
+	JOIN earning ON IMDB.Movie_id = earning.Movie_id
+	WHERE MetaCritic >= 60
+	  AND Title LIKE '%(2012)'
+	  AND Domestic >= 100000000;
+
+
+Problem statement :-
+Print the genre and the maximum weighted rating among all the movies of that genre released in 2014 per genre. (Download the dataset from console)
+Note:
+1. Do not print any row where either genre or the weighted rating is empty/null.
+2.  weighted_rating = avgerge of (rating + metacritic/10.0)
+3. Keep the name of the columns as 'genre' and 'weighted_rating'
+4. The genres should be printed in alphabetical order.
+
+Solution :-
+	SELECT g.genre AS genre, 
+	MAX((i.rating+i.metacritic/10.0)/2.0) AS weighted_rating 
+	FROM IMDb AS I
+	JOIN genre AS g ON i.movie_id=g.movie_id
+	WHERE i.title Like '%2014%' 
+	        AND i.rating IS NOT NULL
+	        AND i.metacritic IS NOT NULL
+	        AND g.genre IS NOT NULL
+	GROUP BY g.genre
+	HAVING 
+	    Round(avg((i.rating+i.metacritic)/10),1)>0
+	ORDER BY g.genre;
+
+
+Problem statement
+Print the genre and the maximum net profit among all the movies of that genre released in 2012 per genre. (Download the dataset from console)
+
+Note:
+1. Do not print any row where either genre or the net profit is empty/null.
+2. net_profit = Domestic + Worldwide - Budget
+3. Keep the name of the columns as 'genre' and 'net_profit'
+4. The genres should be printed in alphabetical order.
+
+Solution :-
+	SELECT g.genre, max(e.Domestic + e.worldwide - i.Budget) as net_profit
+	FROM IMDB as I
+	JOIN earning AS e ON i.Movie_id = e.Movie_id
+	JOIN genre AS g ON i.Movie_id = g.Movie_id
+	WHERE i.title LIKE '%(2012)' AND g.genre IS NOT NULL
+	GROUP by g.genre
+	ORDER BY g.genre;
