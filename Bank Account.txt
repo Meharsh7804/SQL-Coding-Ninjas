@@ -1,0 +1,50 @@
+Problem statement :-
+Table: Users
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| user_id      | int     |
+| user_name    | varchar |
+| credit       | int     |
++--------------+---------+
+user_id is the primary key for this table.
+Each row of this table contains the current credit information for each user.
+
+Table: Transactions
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| trans_id      | int     |
+| paid_by       | int     |
+| paid_to       | int     |
+| amount        | int     |
+| transacted_on | date    |
++---------------+---------+
+trans_id is the primary key for this table.
+Each row of this table contains the information about the transaction in the bank.
+User with id (paid_by) transfer money to user with id (paid_to).
+
+Codestudio Bank (CSB) helps its coders in making virtual payments. Our bank records all transactions in the table Transaction, we want to find out the current balance of all users and check wheter they have breached their credit limit (If their current credit is less than 0).
+
+Write an SQL query to report.
+user_id
+user_name
+credit, current balance after performing transactions.  
+credit_limit_breached, check credit_limit ("Yes" or "No")
+Return the result table in any order.
+
+Solution :-
+with cte as (
+select user_id,user_name,credit,amount,credit-amount as creditt
+from users u
+left join transactions t 
+on u.user_id=t.paid_by)
+select cte.user_id,cte.user_name,coalesce(cte.creditt+t2.amount,credit) as credit,
+case 
+    when coalesce(cte.creditt+t2.amount,credit) <0
+    then 'Yes'
+    else 'No'
+end as credit_limit_breached
+FROM cte
+left join transactions t2
+on cte.user_id=t2.paid_to;
