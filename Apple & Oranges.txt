@@ -1,0 +1,19 @@
+Problem statement :-
+Table: Users
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| user_id      | int     |
+| user_name    | varchar |
+| credit       | int     |
++--------------+---------+
+user_id is the primary key for this table.
+Each row of this table contains the current credit information for each user.
+
+Solution :-
+SELECT
+    sale_date,
+    SUM(CASE WHEN fruit = 'apples' THEN sold_num ELSE -sold_num END) AS diff
+FROM Sales
+GROUP BY sale_date
+ORDER BY sale_date;
