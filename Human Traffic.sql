@@ -1,5 +1,4 @@
 Create table If Not Exists stadium (id int, visit_date DATE NULL, people int);
-
 insert into stadium (id, visit_date, people) values ('1', '2017-01-01', '10');
 insert into stadium (id, visit_date, people) values ('2', '2017-01-02', '109');
 insert into stadium (id, visit_date, people) values ('3', '2017-01-03', '150');
