@@ -1,6 +1,5 @@
 Problem statement :-
 Table: Stadium
-
 +---------------+---------+
 | Column Name   | Type    |
 +---------------+---------+
