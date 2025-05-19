@@ -1,0 +1,43 @@
+Problem statement :-
+Table: Playback
+
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| session_id  | int  |
+| customer_id | int  |
+| start_time  | int  |
+| end_time    | int  |
++-------------+------+
+session_id is the primary key for this table.
+customer_id is the ID of the customer watching this session.
+The session runs during the inclusive interval between start_time and end_time.
+It is guaranteed that start_time <= end_time and that two sessions for the same customer do not intersect.
+
+Table: Ads
+
+ +-------------+------+
+ | Column Name | Type |
+ +-------------+------+
+ | ad_id       | int  |
+ | customer_id | int  |
+ | timestamp   | int  |
+ +-------------+------+
+ad_id is the primary key for this table.
+Customer_id is the ID of the customer viewing this ad.
+Timestamp is the moment of time at which the ad was shown.
+
+
+Write an SQL query to report all the sessions that did not get shown any ads.
+
+Return the result table in any order.
+
+Solution :-
+SELECT session_id
+FROM Playback p
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM Ads a
+    WHERE a.customer_id = p.customer_id
+      AND a.timestamp BETWEEN p.start_time AND p.end_time
+);
