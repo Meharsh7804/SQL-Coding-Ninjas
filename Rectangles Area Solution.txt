@@ -1,0 +1,49 @@
+Problem statement :-
+Table: Points
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| id            | int     |
+| x_value       | int     |
+| y_value       | int     |
++---------------+---------+
+id is the primary key for this table.
+Each point is represented as a 2D coordinate (x_value, y_value).
+Write an SQL query to report all possible axis-aligned rectangles with non-zero area that can be formed by any two points in the Points table.
+Each row in the result should contain three columns (p1, p2, area) where:
+
+p1 and p2 are the id's of the two points that determine the opposite corners of a rectangle.
+area is the area of the rectangle and must be non-zero.
+Report the query in descending order by area first, then in ascending order by p1's id if there is a tie, then in ascending order by p2's id if there is another tie.
+
+The query result format is in the following table:
+Points table:
++----------+-------------+-------------+
+| id       | x_value     | y_value     |
++----------+-------------+-------------+
+| 1        | 2           | 7           |
+| 2        | 4           | 8           |
+| 3        | 2           | 10          |
++----------+-------------+-------------+
+
+Result table:
++----------+-------------+-------------+
+| p1       | p2          | area        |
++----------+-------------+-------------+
+| 2        | 3           | 4           |
+| 1        | 2           | 2           |
++----------+-------------+-------------+
+
+
+Solution :-
+with cte1 as(
+    Select least(po1.id, po2.id) as p1, greatest(po1.id, po2.id) as p2, abs(po1.x_value - po2.x_value)*abs(po1.y_value-po2.y_value) as area
+    from Points po1 
+    join 
+    Points po2 
+    on po1.id != po2.id
+)
+Select  p1, p2, area from cte1
+where area>0
+group by p1, p2, area
+order by area desc, p1 asc, p2 asc
