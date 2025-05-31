@@ -1,0 +1,37 @@
+Problem statement :-
+Table: Employee
+
++-------------+------+
+| Column Name | Type |
++-------------+------+
+| Id              | int  |
+| Month       | int  |
+| Salary      | int  |
++-------------+------+
+(Id, Month) is the primary key for this table.
+Each row in the table indicates the salary of an employee in one month during the year 2020.
+Write an SQL query to calculate the cumulative salary summary for every employee in a single unified table.
+
+The cumulative salary summary for an employee can be calculated as follows:
+
+For each month that the employee worked, sum up the salaries in that month and the previous two months. This is their 3-month sum for that month. If an employee did not work for the company in previous months, their effective salary for those months is 0.
+
+Do not include the 3-month sum for the most recent month that the employee worked for in the summary.
+
+Do not include the 3-month sum for any month the employee did not work.
+
+Return the result table ordered by Id in ascending order. In case of a tie, order it by Month in descending order.
+
+Solution :-
+with cte as
+(select e1.*, 
+    e1.salary+coalesce(e2.salary,0)+coalesce (e3.salary,0) cum_salary,   
+    row_number() over (partition by e1.id order by e1.month desc) rn
+from employee e1 left join employee e2
+    on e1.id=e2.id and e1.month=e2.month+1
+    left join employee e3
+    on e2.id=e3.id and e2.month=e3.month+1
+)
+select id, month, cum_salary salary
+from cte
+where rn<>1
