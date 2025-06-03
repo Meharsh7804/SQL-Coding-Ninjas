@@ -1,0 +1,41 @@
+Problem statement :-
+Table: Department
+
+ Column Name  	 Data Type  
+ id	 	 INT
+ revenue	 INT
+ month	 	 VARCHAR
+
+The table has information about the revenue of each department per month.
+The month has values in ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].
+
+Write an SQL query to reformat the table such that there is a department id column and a revenue column for each month.
+
+The query result format is in the following example: Department table:
+
+ id  	 revenue  	 month  
+ 1	 8000	 Jan
+ 2	 9000	 Jan
+ 3	 10000	 Feb
+ 1	 7000	 Feb
+ 1	 6000	 Mar
+
+Solution :-
+select id,
+sum(case when month = 'Jan' then revenue else null end) as Jan_revenue,
+sum(case when month = 'Feb' then revenue else null end) as Feb_revenue,
+sum(case when month = 'Mar' then revenue else null end) as Mar_revenue,
+sum(case when month = 'Apr' then revenue else null end) as Apr_revenue,
+sum(case when month = 'May' then revenue else null end) as May_revenue,
+sum(case when month = 'Jun' then revenue else null end) as Jun_revenue,
+sum(case when month = 'Jul' then revenue else null end) as Jul_revenue,
+sum(case when month = 'Aug' then revenue else null end) as Aug_revenue,
+sum(case when month = 'Sep' then revenue else null end) as Sep_revenue,
+sum(case when month = 'Oct' then revenue else null end) as Oct_revenue,
+sum(case when month = 'Nov' then revenue else null end) as Nov_revenue,
+sum(case when month = 'Dec' then revenue else null end) as Dec_revenue
+from department
+group by id
+order by id
+
+ 
