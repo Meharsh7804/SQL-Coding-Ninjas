@@ -1,0 +1,26 @@
+Problem statement :-
+Table: Traffic
+
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| user_id       | int     |
+| activity      | enum    |
+| activity_date | date    |
++---------------+---------+
+There is no primary key for this table, it may have duplicate rows.
+The activity column is an ENUM type of ('login', 'logout', 'jobs', 'groups', 'homepage').
+
+Write an SQL query that reports for every date within at most 90 days from today, the number of users that logged in for the first time on that date. Assume today is 2019-06-30.
+
+Solution :-
+with cte as(
+select *,
+count(*) over(partition by user_id) cn
+from traffic
+where activity = 'login' 
+)
+select activity_date as login_date, count(*) user_count
+from cte
+where cn < 2 and activity_date > (select date '2019-06-30' - 90)
+group by activity_date
