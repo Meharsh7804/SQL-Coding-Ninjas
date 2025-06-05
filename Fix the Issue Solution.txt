@@ -1,0 +1,29 @@
+Problem statement :-
+Table: Sales
+
+ Column Name  	 Data Type  
+ sale_id	 INT
+ product_name	 VARCHAR
+ sale_date	 DATE
+
+sale_id is the primary key for this table.
+Each row of this table contains the product name and the date it was sold.
+Since table Sales was filled manually in the year 2000, product_name may contain leading and/or trailing white spaces, also they are case-insensitive.
+
+Write an SQL query to report
+
+product_name in lowercase without leading or trailing white spaces. sale_date in the format ('YYYY-MM').
+total the number of times the product was sold in this month.
+Return the result table ordered by product_name in ascending order. In case of a tie, order it by sale_date in ascending order.
+
+Solution :-
+SELECT 
+    LOWER(TRIM(product_name)) AS product_name,
+    TO_CHAR(sale_date, 'YYYY-MM') AS sale_date,
+    COUNT(*) AS total
+FROM Sales
+GROUP BY 
+    LOWER(TRIM(product_name)), 
+    TO_CHAR(sale_date, 'YYYY-MM')
+ORDER BY 
+    product_name ASC, sale_date ASC;
