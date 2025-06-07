@@ -1,0 +1,38 @@
+Problem statement :-
+Table Salaries:
+
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| company_id    | int     |
+| employee_id   | int     |
+| employee_name | varchar |
+| salary        | int     |
++---------------+---------+
+(company_id, employee_id) is the primary key for this table.
+This table contains the company id, the id, the name and the salary for an employee.
+
+
+Write an SQL query to find the salaries of the employees after applying taxes.
+
+The tax rate is calculated for each company based on the following criteria:
+
+0% If the max salary of any employee in the company is less than 1000$.
+24% If the max salary of any employee in the company is in the range [1000, 10000] inclusive.
+49% If the max salary of any employee in the company is greater than 10000$.
+Return the result table in any order. Round the salary to the nearest integer.
+
+Solution :-
+with cte as (
+    select company_id, employee_id, employee_name, salary,
+    max(salary) over(partition by company_id) 
+    as salaryy from salaries
+)
+
+select company_id, employee_id, employee_name, round((
+    case 
+        when salaryy < 1000 then salary
+        when salaryy >= 1000 and salaryy <= 10000 then (salary - (salary*((24::numeric)/(100)::numeric)))
+        when salaryy > 10000 then (salary - (salary*((49::numeric)/(100)::numeric)))
+    end
+), 0) as salary from cte;
