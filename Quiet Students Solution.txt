@@ -1,0 +1,35 @@
+Problem statement :-
+Table: Student
++---------------------+---------+
+| Column Name         | Type    |
++---------------------+---------+
+| student_id          | int     |
+| student_name        | varchar |
++---------------------+---------+
+student_id is the primary key for this table.
+student_name is the name of the student.
+
+Table: Exam
++---------------+---------+
+| Column Name   | Type    |
++---------------+---------+
+| exam_id       | int     |
+| student_id    | int     |
+| score         | int     |
++---------------+---------+
+(exam_id, student_id) is the primary key for this table.
+Student with student_id got score points in exam with id exam_id.
+
+A "quite" student is the one who took at least one exam and didn't score neither the high score nor the low score.
+
+Write an SQL query to report the students (student_id, student_name) being "quiet" in ALL exams.
+
+Don't return the student who has never taken any exam. Return the result table ordered by student_id.
+
+Solution :-
+WITH cte1 AS (
+SELECT * FROM exam WHERE score IN (SELECT MIN(score) AS score FROM exam 
+UNION ALL 
+SELECT MAX(score) FROM exam))
+SELECT * FROM student WHERE student_id NOT IN (SELECT student_id 
+FROM cte1)AND student_id IN (SELECT student_id FROM exam);
