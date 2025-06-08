@@ -1,0 +1,38 @@
+Problem statement :-
+Table: Employee
++--------------+---------+
+| Column Name  | Type    |
++--------------+---------+
+| Id           | int     |
+| Name         | varchar |
+| Salary       | int     |
+| DepartmentId | int     |
++--------------+---------+
+Id is the primary key for this table.
+Each row contains the ID, name, salary, and department of one employee.
+
+Table: Department
++-------------+---------+
+| Column Name | Type    |
++-------------+---------+
+| Id          | int     |
+| Name        | varchar |
++-------------+---------+
+Id is the primary key for this table.
+Each row contains the ID and the name of one department.
+
+A company's executives are interested in seeing who earns the most money in each of the company's departments. A high earner in a department is an employee who has a salary in the top three unique salaries for that department.
+Write an SQL query to find the employees who are high earners in each of the departments.
+Return the result table in any order.
+
+Solution :-
+SELECT dep.Name AS "Department", emp.Name AS "Employee", emp.Salary 
+FROM Employee emp
+JOIN Department dep 
+ON emp.DepartmentId = dep.Id
+WHERE 3 > (
+SELECT 
+COUNT(DISTINCT emp2.Salary) 
+FROM Employee emp2 
+WHERE emp2.Salary > emp.Salary 
+AND emp.DepartmentId = emp2.DepartmentId);
